@@ -1,0 +1,218 @@
+#+TITLE: Scala Metals
+#+OPTIONS: toc:nil
+* What is Metals?
+
+** An IDE for Scala
+but you need to bring your own editor
+
+#+BEGIN_NOTES
+Scala Metals is an IDE for Scala, in other words, when you are editing
+your code it can give you all kinds of information about in context,
+such the types of your expressions, error highlighting, as well as
+refactoring tools.
+
+So yes, it does pretty much the same thing as IntelliJ -- with the
+difference being that it doesn't actually do any text editing! Instead
+it acts as a server and the editor that you prefer to use can
+communicate with it to provide this functionality in place.
+#+END_NOTES
+
+** An implmentation of LSP for Scala
+
+[L]anguage [S]erver [P]rotocol
+
+An open standard, which is implemented by [[https://langserver.org/][many different editors]].
+
+The canonical implementation is probably VSCode.
+
+[[file:img/language-server-sequence.png]]
+
+#+BEGIN_NOTES
+Of course, if it doesn't include an editor, then you need to use an
+editor that knows how to speak to Metals. And that's where LSP comes
+in: this is an open protocol, based on JSON/RPC that anyone can
+implement. And this means that there are already many editors that can
+work with Metals, even if they don't specifically know anything about
+it.
+#+END_NOTES
+
+** Officially supported Editors
+
+[[file:img/supported-editors.png]]
+
+#+BEGIN_NOTES
+having said that though, support does naturally vary from editor to
+editor, and so the list of "officially" supported editors is
+relatively small.
+#+END_NOTES
+
+** Why an IDE?
+
+*** Real Programmers...
+
+[[file:img/real_programmers.png]]
+https://xkcd.com/378/
+#+BEGIN_NOTES
+I am a bit of a late-adopter in the world of IDEs, partly because I
+figured it was just noise that I didn't need, and partly because I
+couldn't bare to give up the environment that I had been using for
+years.
+
+But gradually I came to realise the error of my ways. Often while
+pairing with someone who was working on IntelliJ I would start to feel
+envious of the features, and so my need for these features started to
+take over.
+
+I had always worked quite happily without one in the past, but it
+started to dawn on me that Scala is a bit different from what I was
+used to.
+#+END_NOTES
+
+*** Scala can be simple, but also complicated
+
+#+BEGIN_NOTES
+And on reflection, I think one of the key reasons for that is that
+scala is complicated.
+
+Of course, on the surface it can seem like a pretty simple language:
+you could be forgiven for thinking, on first meeting it, that it is is
+just a nicer Java, with a lot less boilerplate, and a nicer
+collections library.
+
+But in actual fact, there is a lot going on under the hood.
+#+END_NOTES
+
+#+BEGIN_SRC scala
+  object Hello {
+    def main(args: Array[String]): Unit = println("Hello World")
+  }
+#+END_SRC
+
+*** The compiler is working hard for you
+
+#+BEGIN_NOTES
+So much of what makes Scala what it is, is handled by one of the 20
+odd compiler phases.
+#+END_NOTES
+
+#+BEGIN_SRC shell
+$ scalac -Xshow-phases
+    phase name  id  description
+    ----------  --  -----------
+        parser   1  parse source into ASTs, perform simple desugaring
+         namer   2  resolve names, attach symbols to named trees
+packageobjects   3  load package objects
+         typer   4  the meat and potatoes: type the trees
+        patmat   5  translate match expressions
+
+            [ . . . ]
+
+       cleanup  21  platform-specific cleanups, generate reflective calls
+    delambdafy  22  remove lambdas
+           jvm  23  generate JVM bytecode
+      terminal  24  the last phase during a compilation run
+#+END_SRC
+
+*** What now?
+
+[[file:img/scanamo-scaladoc.png]]
+
+#+BEGIN_NOTES
+Sometimes when you see documention like this, it is just much easier
+to type your expression in your editor and have it tell you what type
+you are getting back (along with what methods you can then call on it)
+#+END_NOTES
+
+*** Just looking at the code is not enough
+
+#+BEGIN_NOTES
+So if the compiler is doing all that work for us, we may as well take
+advantage of it, and that is where Scala metals comes in, because it
+leverages the Scala compiler to provide with you information about
+your code.
+#+END_NOTES
+
+- Type inference
+- Implicit resolution
+- APIs for external libraries
+- Your class/object/trait could be implemented in any file
+
+*** Let's ask the compiler to help
+
+* Metals built on existing tools
+
++ Bloop :: compile server
++ ScalaMeta :: model for representing Scala code
++ Scalafmt :: code reformatting
++ SBT plugin :: or other build tool, provides information about your
+                project
+
+* Built and supported by the Scala Center
+
+[[file:img/scala-center.png]]
+
+* Tour through Metals
+
+** Installation on VSCode
+
+#+BEGIN_SRC shell
+$ brew cask install visual-studio-code
+#+END_SRC
+
+[[file:img/install.gif]]
+
+*** And then it's just a plugin
+
+[[file:img/code-metals-ext.png]]
+
+** Open a Scala project
+
+which is based on one of the supported build tools, e.g. SBT
+
+** Metals Sidebar
+
++ Semantic tree-view of the codebase
++ Run Doctor for debugging
+
+** Example of features
++ Inline errors (diagnostics)
++ Find definition
++ Documentation on symbol
++ Rename a symbol / refactoring
++ Worksheets
+
+** Completion
+
+Some quite advanced completions:
+
++ exhaustive matches
++ replace string literals with string interpolations
+
+* Usage with other editors
+
+** Installing with Coursier
+
+#+BEGIN_SRC shell
+./coursier bootstrap \
+  --java-opt -Xss4m \
+  --java-opt -Xms100m \
+  --java-opt -Dmetals.client=emacs \
+  org.scalameta:metals_2.12:0.8.3 \
+  -r bintray:scalacenter/releases \
+  -r sonatype:snapshots \
+  -o /usr/local/bin/metals-emacs -f
+#+END_SRC
+
+** Emacs
+
++ ~lsp-mode~ :: flashy in-your-face IDE-like experience
++ ~eglot~ :: subtle, configurable, inconvenient
+
+* Limitiations
+
++ Still some features missing from IntelliJ
++ Actively being developed so still changing / evolving
+
+* Future
+
+** Dotty LSP server

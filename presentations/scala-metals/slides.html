@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Scala Metals</title>
+<meta name="author" content="(Paul Roberts)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../lib/reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="../lib/reveal.js/css/theme/moon.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '../lib/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Scala Metals</h1><h2 class="author">Paul Roberts</h2><p class="date">Created: 2020-03-31 Tue 14:56</p>
+</section>
+<section>
+<section id="slide-org491b046">
+<h2 id="org491b046"><span class="section-number-2">1</span> What is Metals?</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+</section>
+<section id="slide-orgdc36307">
+<h3 id="orgdc36307"><span class="section-number-3">1.1</span> An IDE for Scala</h3>
+<p>
+but you need to bring your own editor
+</p>
+
+<aside class="notes">
+<p>
+Scala Metals is an IDE for Scala, in other words, when you are editing
+your code it can give you all kinds of information about in context,
+such the types of your expressions, error highlighting, as well as
+refactoring tools.
+</p>
+
+<p>
+So yes, it does pretty much the same thing as IntelliJ &#x2013; with the
+difference being that it doesn't actually do any text editing! Instead
+it acts as a server and the editor that you prefer to use can
+communicate with it to provide this functionality in place.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org4bf9880">
+<h3 id="org4bf9880"><span class="section-number-3">1.2</span> An implmentation of LSP for Scala</h3>
+<p>
+[L]anguage [S]erver [P]rotocol
+</p>
+
+<p>
+An open standard, which is implemented by <a href="https://langserver.org/">many different editors</a>.
+</p>
+
+<p>
+The canonical implementation is probably VSCode.
+</p>
+
+
+<div class="figure">
+<p><img src="img/language-server-sequence.png" alt="language-server-sequence.png" />
+</p>
+</div>
+
+<aside class="notes">
+<p>
+Of course, if it doesn't include an editor, then you need to use an
+editor that knows how to speak to Metals. And that's where LSP comes
+in: this is an open protocol, based on JSON/RPC that anyone can
+implement. And this means that there are already many editors that can
+work with Metals, even if they don't specifically know anything about
+it.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org1d8f18a">
+<h3 id="org1d8f18a"><span class="section-number-3">1.3</span> Officially supported Editors</h3>
+
+<div class="figure">
+<p><img src="img/supported-editors.png" alt="supported-editors.png" />
+</p>
+</div>
+
+<aside class="notes">
+<p>
+having said that though, support does naturally vary from editor to
+editor, and so the list of "officially" supported editors is
+relatively small.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org6cec0de">
+<h3 id="org6cec0de"><span class="section-number-3">1.4</span> Why an IDE?</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+</section>
+<section id="slide-org58b2c84">
+<h4 id="org58b2c84"><span class="section-number-4">1.4.1</span> Real Programmers&#x2026;</h4>
+<p>
+<img src="img/real_programmers.png" alt="real_programmers.png" />
+<a href="https://xkcd.com/378/">https://xkcd.com/378/</a>
+</p>
+<aside class="notes">
+<p>
+I am a bit of a late-adopter in the world of IDEs, partly because I
+figured it was just noise that I didn't need, and partly because I
+couldn't bare to give up the environment that I had been using for
+years.
+</p>
+
+<p>
+But gradually I came to realise the error of my ways. Often while
+pairing with someone who was working on IntelliJ I would start to feel
+envious of the features, and so my need for these features started to
+take over.
+</p>
+
+<p>
+I had always worked quite happily without one in the past, but it
+started to dawn on me that Scala is a bit different from what I was
+used to.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org55aee84">
+<h4 id="org55aee84"><span class="section-number-4">1.4.2</span> Scala can be simple, but also complicated</h4>
+<aside class="notes">
+<p>
+And on reflection, I think one of the key reasons for that is that
+scala is complicated.
+</p>
+
+<p>
+Of course, on the surface it can seem like a pretty simple language:
+you could be forgiven for thinking, on first meeting it, that it is is
+just a nicer Java, with a lot less boilerplate, and a nicer
+collections library.
+</p>
+
+<p>
+But in actual fact, there is a lot going on under the hood.
+</p>
+
+</aside>
+
+<div class="org-src-container">
+
+<pre  class="src src-scala"><code trim><span style="color: #b6a0ff;">object</span> <span style="color: #00baf4;">Hello</span> {
+  <span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">main</span>(args<span style="color: #b6a0ff;">:</span> <span style="color: #ed92f8;">Array</span>[<span style="color: #00baf4;">String</span>])<span style="color: #b6a0ff;">:</span> <span style="color: #ed92f8;">Unit</span> <span style="color: #b6a0ff;">=</span> println(<span style="color: #72a4ff;">"Hello World"</span>)
+}
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org2a94093">
+<h4 id="org2a94093"><span class="section-number-4">1.4.3</span> The compiler is working hard for you</h4>
+<aside class="notes">
+<p>
+So much of what makes Scala what it is, is handled by one of the 20
+odd compiler phases.
+</p>
+
+</aside>
+
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>$ scalac -Xshow-phases
+    phase name  id  description
+    ----------  --  -----------
+        parser   1  parse source into ASTs, perform simple desugaring
+         namer   2  resolve names, attach symbols to named trees
+packageobjects   3  load package objects
+         typer   4  the meat and potatoes: type the trees
+        patmat   5  translate match expressions
+
+            [ . . . ]
+
+       cleanup  21  platform-specific cleanups, generate reflective calls
+    delambdafy  22  remove lambdas
+           jvm  23  generate JVM bytecode
+      terminal  24  the last phase during a compilation run
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org8b3f35b">
+<h4 id="org8b3f35b"><span class="section-number-4">1.4.4</span> What now?</h4>
+
+<div class="figure">
+<p><img src="img/scanamo-scaladoc.png" alt="scanamo-scaladoc.png" />
+</p>
+</div>
+
+<aside class="notes">
+<p>
+Sometimes when you see documention like this, it is just much easier
+to type your expression in your editor and have it tell you what type
+you are getting back (along with what methods you can then call on it)
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org17aea8f">
+<h4 id="org17aea8f"><span class="section-number-4">1.4.5</span> Just looking at the code is not enough</h4>
+<aside class="notes">
+<p>
+So if the compiler is doing all that work for us, we may as well take
+advantage of it, and that is where Scala metals comes in, because it
+leverages the Scala compiler to provide with you information about
+your code.
+</p>
+
+</aside>
+
+<ul>
+<li>Type inference</li>
+<li>Implicit resolution</li>
+<li>APIs for external libraries</li>
+<li>Your class/object/trait could be implemented in any file</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd898789">
+<h4 id="orgd898789"><span class="section-number-4">1.4.6</span> Let's ask the compiler to help</h4>
+
+</section>
+</section>
+<section>
+<section id="slide-org9eba49c">
+<h2 id="org9eba49c"><span class="section-number-2">2</span> Metals built on existing tools</h2>
+<dl>
+<dt>Bloop</dt><dd>compile server</dd>
+<dt>ScalaMeta</dt><dd>model for representing Scala code</dd>
+<dt>Scalafmt</dt><dd>code reformatting</dd>
+<dt>SBT plugin</dt><dd>or other build tool, provides information about your
+project</dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb61ccf2">
+<h2 id="orgb61ccf2"><span class="section-number-2">3</span> Built and supported by the Scala Center</h2>
+
+<div class="figure">
+<p><img src="img/scala-center.png" alt="scala-center.png" />
+</p>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org009d5e2">
+<h2 id="org009d5e2"><span class="section-number-2">4</span> Tour through Metals</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+</section>
+<section id="slide-orgf51e706">
+<h3 id="orgf51e706"><span class="section-number-3">4.1</span> Installation on VSCode</h3>
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>$ brew cask install visual-studio-code
+</code></pre>
+</div>
+
+
+<div class="figure">
+<p><img src="img/install.gif" alt="install.gif" />
+</p>
+</div>
+
+</section>
+<section id="slide-org06f497a">
+<h4 id="org06f497a"><span class="section-number-4">4.1.1</span> And then it's just a plugin</h4>
+
+<div class="figure">
+<p><img src="img/code-metals-ext.png" alt="code-metals-ext.png" />
+</p>
+</div>
+
+</section>
+<section id="slide-org2a2eec3">
+<h3 id="org2a2eec3"><span class="section-number-3">4.2</span> Open a Scala project</h3>
+<p>
+which is based on one of the supported build tools, e.g. SBT
+</p>
+
+</section>
+<section id="slide-org1c188e7">
+<h3 id="org1c188e7"><span class="section-number-3">4.3</span> Metals Sidebar</h3>
+<ul>
+<li>Semantic tree-view of the codebase</li>
+<li>Run Doctor for debugging</li>
+
+</ul>
+
+</section>
+<section id="slide-org25d33bf">
+<h3 id="org25d33bf"><span class="section-number-3">4.4</span> Example of features</h3>
+<ul>
+<li>Inline errors (diagnostics)</li>
+<li>Find definition</li>
+<li>Documentation on symbol</li>
+<li>Rename a symbol / refactoring</li>
+<li>Worksheets</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf7611b8">
+<h3 id="orgf7611b8"><span class="section-number-3">4.5</span> Completion</h3>
+<p>
+Some quite advanced completions:
+</p>
+
+<ul>
+<li>exhaustive matches</li>
+<li>replace string literals with string interpolations</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdad5734">
+<h2 id="orgdad5734"><span class="section-number-2">5</span> Usage with other editors</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+</section>
+<section id="slide-org92792bd">
+<h3 id="org92792bd"><span class="section-number-3">5.1</span> Installing with Coursier</h3>
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>./coursier bootstrap <span style="color: #72a4ff;">\</span>
+  --java-opt -Xss4m <span style="color: #72a4ff;">\</span>
+  --java-opt -Xms100m <span style="color: #72a4ff;">\</span>
+  --java-opt -Dmetals.client=emacs <span style="color: #72a4ff;">\</span>
+  org.scalameta:metals_2.12:0.8.3 <span style="color: #72a4ff;">\</span>
+  -r bintray:scalacenter/releases <span style="color: #72a4ff;">\</span>
+  -r sonatype:snapshots <span style="color: #72a4ff;">\</span>
+  -o /usr/local/bin/metals-emacs -f
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org85b11df">
+<h3 id="org85b11df"><span class="section-number-3">5.2</span> Emacs</h3>
+<dl>
+<dt><code>lsp-mode</code></dt><dd>flashy in-your-face IDE-like experience</dd>
+<dt><code>eglot</code></dt><dd>subtle, configurable, inconvenient</dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-orga61b866">
+<h2 id="orga61b866"><span class="section-number-2">6</span> Limitiations</h2>
+<ul>
+<li>Still some features missing from IntelliJ</li>
+<li>Actively being developed so still changing / evolving</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf321cc1">
+<h2 id="orgf321cc1"><span class="section-number-2">7</span> Future</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+</section>
+<section id="slide-org7a95f08">
+<h3 id="org7a95f08"><span class="section-number-3">7.1</span> Dotty LSP server</h3>
+</section>
+</section>
+</div>
+</div>
+<script src="../lib/reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: '../lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: '../lib/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: '../lib/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: '../lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: '../lib/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

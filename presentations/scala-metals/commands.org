@@ -1,0 +1,8 @@
+* Initialise
+
+#+BEGIN_SRC json
+  { 
+      "jsonrpc": "2.02",
+      "method": "initialize"
+  }
+#+END_SRC
