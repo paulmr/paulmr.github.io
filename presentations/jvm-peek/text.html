@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-06-26 Fri 09:45 -->
+<!-- 2020-06-26 Fri 10:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Peeking into the JVM</title>
@@ -180,6 +180,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
+<style>.org-svg { width: 40%; }</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -230,8 +231,8 @@ for the JavaScript code in this tag.
 <body>
 <div id="content">
 <h1 class="title">Peeking into the JVM</h1>
-<div id="outline-container-orgd9c107a" class="outline-2">
-<h2 id="orgd9c107a"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgf1098a7" class="outline-2">
+<h2 id="orgf1098a7"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li>Some details inside the JVM</li>
@@ -245,8 +246,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgf75eb39" class="outline-2">
-<h2 id="orgf75eb39"><span class="section-number-2">2</span> What is the JVM</h2>
+<div id="outline-container-org435d6ca" class="outline-2">
+<h2 id="org435d6ca"><span class="section-number-2">2</span> What is the JVM</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li>Part of the <b>Java Platform</b></li>
@@ -260,8 +261,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org9771d8e" class="outline-2">
-<h2 id="org9771d8e"><span class="section-number-2">3</span> Native code</h2>
+<div id="outline-container-org9b6bb4f" class="outline-2">
+<h2 id="org9b6bb4f"><span class="section-number-2">3</span> Native code</h2>
 <div class="outline-text-2" id="text-3">
 
 <div class="figure">
@@ -299,8 +300,8 @@ course).
 </div>
 </div>
 
-<div id="outline-container-org6fc06fa" class="outline-2">
-<h2 id="org6fc06fa"><span class="section-number-2">4</span> Java model</h2>
+<div id="outline-container-orgcd78c57" class="outline-2">
+<h2 id="orgcd78c57"><span class="section-number-2">4</span> Java model</h2>
 <div class="outline-text-2" id="text-4">
 
 <div class="figure">
@@ -369,8 +370,8 @@ how that is actually implemented on each platform.
 </div>
 </div>
 
-<div id="outline-container-orgc0a6e93" class="outline-3">
-<h3 id="orgc0a6e93"><span class="section-number-3">4.1</span> Standard library</h3>
+<div id="outline-container-org06e5b48" class="outline-3">
+<h3 id="org06e5b48"><span class="section-number-3">4.1</span> Standard library</h3>
 <div class="outline-text-3" id="text-4-1">
 <ul class="org-ul">
 <li>A much higher-level of abstraction</li>
@@ -395,8 +396,8 @@ how that is actually implemented on each platform.
 </div>
 </div>
 
-<div id="outline-container-org05570ed" class="outline-3">
-<h3 id="org05570ed"><span class="section-number-3">4.2</span> The Java Specification</h3>
+<div id="outline-container-org96e1fdf" class="outline-3">
+<h3 id="org96e1fdf"><span class="section-number-3">4.2</span> The Java Specification</h3>
 <div class="outline-text-3" id="text-4-2">
 
 <div class="figure">
@@ -407,8 +408,8 @@ how that is actually implemented on each platform.
 </div>
 </div>
 
-<div id="outline-container-org9265716" class="outline-2">
-<h2 id="org9265716"><span class="section-number-2">5</span> What's in the JVM?</h2>
+<div id="outline-container-org54d58e9" class="outline-2">
+<h2 id="org54d58e9"><span class="section-number-2">5</span> What's in the JVM?</h2>
 <div class="outline-text-2" id="text-5">
 
 <div class="figure">
@@ -418,8 +419,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orgc5aec27" class="outline-3">
-<h3 id="orgc5aec27"><span class="section-number-3">5.1</span> Heap</h3>
+<div id="outline-container-orgc2be196" class="outline-3">
+<h3 id="orgc2be196"><span class="section-number-3">5.1</span> Heap</h3>
 <div class="outline-text-3" id="text-5-1">
 <ul class="org-ul">
 <li>Memory where objects etc are allocated</li>
@@ -430,8 +431,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orge7bebd9" class="outline-3">
-<h3 id="orge7bebd9"><span class="section-number-3">5.2</span> Methods</h3>
+<div id="outline-container-org49c08da" class="outline-3">
+<h3 id="org49c08da"><span class="section-number-3">5.2</span> Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <ul class="org-ul">
 <li>The stage space where executable bytecode loaded from class files is
@@ -440,8 +441,8 @@ stored.</li>
 </div>
 </div>
 
-<div id="outline-container-org6775cb2" class="outline-3">
-<h3 id="org6775cb2"><span class="section-number-3">5.3</span> Threads</h3>
+<div id="outline-container-org59876c6" class="outline-3">
+<h3 id="org59876c6"><span class="section-number-3">5.3</span> Threads</h3>
 <div class="outline-text-3" id="text-5-3">
 <ul class="org-ul">
 <li>An individual execution state</li>
@@ -449,8 +450,8 @@ stored.</li>
 </div>
 </div>
 
-<div id="outline-container-orgd071579" class="outline-3">
-<h3 id="orgd071579"><span class="section-number-3">5.4</span> Stacks</h3>
+<div id="outline-container-org23403c8" class="outline-3">
+<h3 id="org23403c8"><span class="section-number-3">5.4</span> Stacks</h3>
 <div class="outline-text-3" id="text-5-4">
 <ul class="org-ul">
 <li>Ephemeral storage</li>
@@ -459,8 +460,8 @@ stored.</li>
 </ul>
 </div>
 
-<div id="outline-container-org0a77bd5" class="outline-4">
-<h4 id="org0a77bd5"><span class="section-number-4">5.4.1</span> Call stack</h4>
+<div id="outline-container-org3c539c2" class="outline-4">
+<h4 id="org3c539c2"><span class="section-number-4">5.4.1</span> Call stack</h4>
 <div class="outline-text-4" id="text-5-4-1">
 
 <div class="figure">
@@ -471,8 +472,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orgf7294ab" class="outline-4">
-<h4 id="orgf7294ab"><span class="section-number-4">5.4.2</span> Call stack - visit</h4>
+<div id="outline-container-org81fcd78" class="outline-4">
+<h4 id="org81fcd78"><span class="section-number-4">5.4.2</span> Call stack - visit</h4>
 <div class="outline-text-4" id="text-5-4-2">
 
 <div class="figure">
@@ -483,8 +484,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org70233c9" class="outline-4">
-<h4 id="org70233c9"><span class="section-number-4">5.4.3</span> Call stack - return</h4>
+<div id="outline-container-org1e43bc6" class="outline-4">
+<h4 id="org1e43bc6"><span class="section-number-4">5.4.3</span> Call stack - return</h4>
 <div class="outline-text-4" id="text-5-4-3">
 
 <div class="figure">
@@ -495,20 +496,20 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orgccf4d1a" class="outline-4">
-<h4 id="orgccf4d1a"><span class="section-number-4">5.4.4</span> Stacktrace</h4>
+<div id="outline-container-org357c8cf" class="outline-4">
+<h4 id="org357c8cf"><span class="section-number-4">5.4.4</span> Stacktrace</h4>
 <div class="outline-text-4" id="text-5-4-4">
 <div class="org-src-container">
-<pre class="src src-java"><span style="color: #5317ac;">public</span> <span style="color: #5317ac;">class</span> <span style="color: #8f0075;">Excep</span> {
-  <span style="color: #5317ac;">public</span> <span style="color: #5317ac;">static</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">fn2</span>() <span style="color: #5317ac;">throws</span> <span style="color: #8f0075;">IllegalArgumentException</span> {
-    <span style="color: #5317ac;">throw</span> <span style="color: #5317ac;">new</span> <span style="color: #8f0075;">IllegalArgumentException</span>();
+<pre class="src src-java"><span style="color: #00ffff;">public</span> <span style="color: #00ffff;">class</span> <span style="color: #98fb98;">Excep</span> {
+  <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span> <span style="color: #98fb98;">void</span> <span style="color: #87cefa;">fn2</span>() <span style="color: #00ffff;">throws</span> <span style="color: #98fb98;">IllegalArgumentException</span> {
+    <span style="color: #00ffff;">throw</span> <span style="color: #00ffff;">new</span> <span style="color: #98fb98;">IllegalArgumentException</span>();
   }
 
-  <span style="color: #5317ac;">public</span> <span style="color: #5317ac;">static</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">fn1</span>() <span style="color: #5317ac;">throws</span> <span style="color: #8f0075;">IllegalArgumentException</span> {
+  <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span> <span style="color: #98fb98;">void</span> <span style="color: #87cefa;">fn1</span>() <span style="color: #00ffff;">throws</span> <span style="color: #98fb98;">IllegalArgumentException</span> {
     fn2();
   }
 
-  <span style="color: #5317ac;">public</span> <span style="color: #5317ac;">static</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">main</span>(<span style="color: #8f0075;">String</span>[] <span style="color: #00538b;">args</span>) <span style="color: #5317ac;">throws</span> <span style="color: #8f0075;">IllegalArgumentException</span> {
+  <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span> <span style="color: #98fb98;">void</span> <span style="color: #87cefa;">main</span>(<span style="color: #98fb98;">String</span>[] <span style="color: #eedd82;">args</span>) <span style="color: #00ffff;">throws</span> <span style="color: #98fb98;">IllegalArgumentException</span> {
     fn1();
   }
 }
@@ -526,8 +527,8 @@ Exception in thread "main" java.lang.IllegalArgumentException
 </div>
 </div>
 
-<div id="outline-container-orgc710075" class="outline-2">
-<h2 id="orgc710075"><span class="section-number-2">6</span> What does bytecode look like?</h2>
+<div id="outline-container-orgf0d37d3" class="outline-2">
+<h2 id="orgf0d37d3"><span class="section-number-2">6</span> What does bytecode look like?</h2>
 <div class="outline-text-2" id="text-6">
 <ul class="org-ul">
 <li>1-byte opcode specifying operation to be performed</li>
@@ -550,8 +551,8 @@ bytecode.</li>
 </ul>
 </div>
 
-<div id="outline-container-orge5a6aae" class="outline-3">
-<h3 id="orge5a6aae"><span class="section-number-3">6.1</span> yeah but I want to <b>see</b> it</h3>
+<div id="outline-container-org4d7111a" class="outline-3">
+<h3 id="org4d7111a"><span class="section-number-3">6.1</span> yeah but I want to <b>see</b> it</h3>
 <div class="outline-text-3" id="text-6-1">
 <ul class="org-ul">
 <li>We can use <code>javap</code> to disassemble class files and take a look.
@@ -563,25 +564,25 @@ bytecode.</li>
 </div>
 </div>
 
-<div id="outline-container-orga8e555b" class="outline-3">
-<h3 id="orga8e555b"><span class="section-number-3">6.2</span> A simple example - Java source</h3>
+<div id="outline-container-orge41c523" class="outline-3">
+<h3 id="orge41c523"><span class="section-number-3">6.2</span> A simple example - Java source</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 Java code:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-java"><span style="color: #5317ac;">public</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">count</span>(<span style="color: #8f0075;">int</span> <span style="color: #00538b;">max</span>) {
-    <span style="color: #8f0075;">int</span> <span style="color: #00538b;">i</span> = 0;
-    <span style="color: #5317ac;">while</span>(i &lt; <span style="color: #8f0075;">max</span>) i++;
+<pre class="src src-java"><span style="color: #00ffff;">public</span> <span style="color: #98fb98;">void</span> <span style="color: #87cefa;">count</span>(<span style="color: #98fb98;">int</span> <span style="color: #eedd82;">max</span>) {
+    <span style="color: #98fb98;">int</span> <span style="color: #eedd82;">i</span> = 0;
+    <span style="color: #00ffff;">while</span>(i &lt; <span style="color: #98fb98;">max</span>) i++;
 }
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org9a07f09" class="outline-3">
-<h3 id="org9a07f09"><span class="section-number-3">6.3</span> A simple example - bytecode</h3>
+<div id="outline-container-org7cb0c32" class="outline-3">
+<h3 id="org7cb0c32"><span class="section-number-3">6.3</span> A simple example - bytecode</h3>
 <div class="outline-text-3" id="text-6-3">
 
 <div class="figure">
@@ -592,8 +593,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org0f17730" class="outline-3">
-<h3 id="org0f17730"><span class="section-number-3">6.4</span> A simple example - bytecode 2</h3>
+<div id="outline-container-org9b28a5a" class="outline-3">
+<h3 id="org9b28a5a"><span class="section-number-3">6.4</span> A simple example - bytecode 2</h3>
 <div class="outline-text-3" id="text-6-4">
 
 <div class="figure">
@@ -604,8 +605,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org5506952" class="outline-3">
-<h3 id="org5506952"><span class="section-number-3">6.5</span> A simple example - bytecode 3</h3>
+<div id="outline-container-orgac4788d" class="outline-3">
+<h3 id="orgac4788d"><span class="section-number-3">6.5</span> A simple example - bytecode 3</h3>
 <div class="outline-text-3" id="text-6-5">
 
 <div class="figure">
@@ -616,8 +617,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org249330d" class="outline-3">
-<h3 id="org249330d"><span class="section-number-3">6.6</span> A simple example - bytecode 4</h3>
+<div id="outline-container-org97bea95" class="outline-3">
+<h3 id="org97bea95"><span class="section-number-3">6.6</span> A simple example - bytecode 4</h3>
 <div class="outline-text-3" id="text-6-6">
 
 <div class="figure">
@@ -628,8 +629,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orgd2afc62" class="outline-3">
-<h3 id="orgd2afc62"><span class="section-number-3">6.7</span> A simple example - bytecode 5</h3>
+<div id="outline-container-org270bdbc" class="outline-3">
+<h3 id="org270bdbc"><span class="section-number-3">6.7</span> A simple example - bytecode 5</h3>
 <div class="outline-text-3" id="text-6-7">
 
 <div class="figure">
@@ -640,8 +641,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org02c45ce" class="outline-3">
-<h3 id="org02c45ce"><span class="section-number-3">6.8</span> A simple example - bytecode 6</h3>
+<div id="outline-container-org56141e0" class="outline-3">
+<h3 id="org56141e0"><span class="section-number-3">6.8</span> A simple example - bytecode 6</h3>
 <div class="outline-text-3" id="text-6-8">
 
 <div class="figure">
@@ -654,8 +655,8 @@ Sorry, your browser does not support SVG.</object>
 </div>
 
 
-<div id="outline-container-org38a8185" class="outline-2">
-<h2 id="org38a8185"><span class="section-number-2">7</span> The Class file</h2>
+<div id="outline-container-org50ae2e5" class="outline-2">
+<h2 id="org50ae2e5"><span class="section-number-2">7</span> The Class file</h2>
 <div class="outline-text-2" id="text-7">
 <ul class="org-ul">
 <li>Bytecode is stored in a <b>Class file</b> (e.g. on disk etc)</li>
@@ -667,8 +668,8 @@ interface, or module</li>
 </ul>
 </div>
 
-<div id="outline-container-orgd0ca13e" class="outline-3">
-<h3 id="orgd0ca13e"><span class="section-number-3">7.1</span> Class file format</h3>
+<div id="outline-container-org486fd60" class="outline-3">
+<h3 id="org486fd60"><span class="section-number-3">7.1</span> Class file format</h3>
 <div class="outline-text-3" id="text-7-1">
 <ul class="org-ul">
 <li>A stream of platform-agnostic bytes
@@ -709,8 +710,8 @@ just loading code into memory and executing it.
 </div>
 </div>
 
-<div id="outline-container-org40f2d7c" class="outline-3">
-<h3 id="org40f2d7c"><span class="section-number-3">7.2</span> Header</h3>
+<div id="outline-container-org54a6aec" class="outline-3">
+<h3 id="org54a6aec"><span class="section-number-3">7.2</span> Header</h3>
 <div class="outline-text-3" id="text-7-2">
 <ul class="org-ul">
 <li>Magic Constant that identifies the beginning of the stream as a Class File</li>
@@ -724,8 +725,8 @@ $ hexdump -C Count.class
 </div>
 </div>
 
-<div id="outline-container-org8942b95" class="outline-3">
-<h3 id="org8942b95"><span class="section-number-3">7.3</span> Constant pool</h3>
+<div id="outline-container-org8aabb41" class="outline-3">
+<h3 id="org8aabb41"><span class="section-number-3">7.3</span> Constant pool</h3>
 <div class="outline-text-3" id="text-7-3">
 <ul class="org-ul">
 <li>Avoids having to repeat constants over and over again</li>
@@ -740,8 +741,8 @@ $ hexdump -C Count.class
 </div>
 </div>
 
-<div id="outline-container-orgd241d84" class="outline-3">
-<h3 id="orgd241d84"><span class="section-number-3">7.4</span> Method definitions</h3>
+<div id="outline-container-orgbf22a31" class="outline-3">
+<h3 id="orgbf22a31"><span class="section-number-3">7.4</span> Method definitions</h3>
 <div class="outline-text-3" id="text-7-4">
 <p>
 The core instructions which define the computations.
@@ -750,8 +751,8 @@ The core instructions which define the computations.
 </div>
 </div>
 
-<div id="outline-container-org050ef50" class="outline-2">
-<h2 id="org050ef50"><span class="section-number-2">8</span> Optimisations</h2>
+<div id="outline-container-org7cdd58a" class="outline-2">
+<h2 id="org7cdd58a"><span class="section-number-2">8</span> Optimisations</h2>
 <div class="outline-text-2" id="text-8">
 <ul class="org-ul">
 <li>The spec just defines the external view of the behaviour</li>
@@ -760,8 +761,8 @@ it's behaviour at the abstract level</li>
 </ul>
 </div>
 
-<div id="outline-container-orgbc730cf" class="outline-3">
-<h3 id="orgbc730cf"><span class="section-number-3">8.1</span> Just-In-Time compilation</h3>
+<div id="outline-container-orgeafae3c" class="outline-3">
+<h3 id="orgeafae3c"><span class="section-number-3">8.1</span> Just-In-Time compilation</h3>
 <div class="outline-text-3" id="text-8-1">
 <ul class="org-ul">
 <li>Code actually gets faster the more it runs</li>
@@ -774,8 +775,8 @@ it's behaviour at the abstract level</li>
 </div>
 </div>
 
-<div id="outline-container-org551d6e5" class="outline-4">
-<h4 id="org551d6e5"><span class="section-number-4">8.1.1</span> Compile to native code</h4>
+<div id="outline-container-org7cbe9db" class="outline-4">
+<h4 id="org7cbe9db"><span class="section-number-4">8.1.1</span> Compile to native code</h4>
 <div class="outline-text-4" id="text-8-1-1">
 <ul class="org-ul">
 <li>The JVM is capable of compiling to native code on the fly</li>
@@ -786,8 +787,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-org1d2111f" class="outline-4">
-<h4 id="org1d2111f"><span class="section-number-4">8.1.2</span> Compile only when needed</h4>
+<div id="outline-container-org7e6b505" class="outline-4">
+<h4 id="org7e6b505"><span class="section-number-4">8.1.2</span> Compile only when needed</h4>
 <div class="outline-text-4" id="text-8-1-2">
 <ul class="org-ul">
 <li>The JVM detects 'hot' code
@@ -801,8 +802,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-org2c52131" class="outline-2">
-<h2 id="org2c52131"><span class="section-number-2">9</span> Garbage Collector</h2>
+<div id="outline-container-org06c58d7" class="outline-2">
+<h2 id="org06c58d7"><span class="section-number-2">9</span> Garbage Collector</h2>
 <div class="outline-text-2" id="text-9">
 <ul class="org-ul">
 <li>Tracks references to objects</li>
@@ -811,8 +812,8 @@ compile it, you don't save time</li>
 </ul>
 </div>
 
-<div id="outline-container-org9578777" class="outline-3">
-<h3 id="org9578777"><span class="section-number-3">9.1</span> Marking phase</h3>
+<div id="outline-container-orga7037ba" class="outline-3">
+<h3 id="orga7037ba"><span class="section-number-3">9.1</span> Marking phase</h3>
 <div class="outline-text-3" id="text-9-1">
 <ul class="org-ul">
 <li>searches all objects to see which are accessible</li>
@@ -822,8 +823,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-orge08bf76" class="outline-3">
-<h3 id="orge08bf76"><span class="section-number-3">9.2</span> Deletion phase</h3>
+<div id="outline-container-org6758ed5" class="outline-3">
+<h3 id="org6758ed5"><span class="section-number-3">9.2</span> Deletion phase</h3>
 <div class="outline-text-3" id="text-9-2">
 <ul class="org-ul">
 <li>frees up space by deleting objects marked as unused</li>
@@ -835,8 +836,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-org3c7718a" class="outline-3">
-<h3 id="org3c7718a"><span class="section-number-3">9.3</span> Compaction phase</h3>
+<div id="outline-container-org323cd3e" class="outline-3">
+<h3 id="org323cd3e"><span class="section-number-3">9.3</span> Compaction phase</h3>
 <div class="outline-text-3" id="text-9-3">
 <ul class="org-ul">
 <li>moves objects around to make contiguous free space</li>
@@ -845,8 +846,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-org5084b31" class="outline-3">
-<h3 id="org5084b31"><span class="section-number-3">9.4</span> Optimisations</h3>
+<div id="outline-container-org265e00f" class="outline-3">
+<h3 id="org265e00f"><span class="section-number-3">9.4</span> Optimisations</h3>
 <div class="outline-text-3" id="text-9-4">
 <ul class="org-ul">
 <li>Generational collector
@@ -866,8 +867,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-orge82131e" class="outline-2">
-<h2 id="orge82131e"><span class="section-number-2">10</span> Graal</h2>
+<div id="outline-container-orgd675e8a" class="outline-2">
+<h2 id="orgd675e8a"><span class="section-number-2">10</span> Graal</h2>
 <div class="outline-text-2" id="text-10">
 
 <div class="figure">
@@ -876,8 +877,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-org7e6711e" class="outline-3">
-<h3 id="org7e6711e"><span class="section-number-3">10.1</span> A new(ish) JVM</h3>
+<div id="outline-container-org89721ca" class="outline-3">
+<h3 id="org89721ca"><span class="section-number-3">10.1</span> A new(ish) JVM</h3>
 <div class="outline-text-3" id="text-10-1">
 <ul class="org-ul">
 <li>Written in Java</li>
@@ -898,8 +899,8 @@ compile it, you don't save time</li>
 </div>
 </div>
 
-<div id="outline-container-org9469d4d" class="outline-2">
-<h2 id="org9469d4d"><span class="section-number-2">11</span> References &amp; more info</h2>
+<div id="outline-container-org226fb56" class="outline-2">
+<h2 id="org226fb56"><span class="section-number-2">11</span> References &amp; more info</h2>
 <div class="outline-text-2" id="text-11">
 <ul class="org-ul">
 <li><a href="http://craftinginterpreters.com/a-virtual-machine.html">Crafting Virtual Interpreters</a> - "A handbook for making programming
@@ -917,7 +918,7 @@ languages."</li>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Paul Roberts</p>
-<p class="date">Created: 2020-06-26 Fri 09:45</p>
+<p class="date">Created: 2020-06-26 Fri 10:05</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
