@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-06-26 Fri 09:45 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Peeking into the JVM</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Paul Roberts" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Peeking into the JVM</h1>
+<div id="outline-container-orgd9c107a" class="outline-2">
+<h2 id="orgd9c107a"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>Some details inside the JVM</li>
+
+<li>How the JVM fits into the bigger picture</li>
+
+<li>It's a big subject, we won't get to all of it</li>
+
+<li>Why I think the JVM is cool</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf75eb39" class="outline-2">
+<h2 id="orgf75eb39"><span class="section-number-2">2</span> What is the JVM</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>Part of the <b>Java Platform</b></li>
+
+<li>Java is a tool for producing software in a platform independant way</li>
+
+<li>Compile code once, run it anywhere (in theory)</li>
+
+<li>Sandboxing</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9771d8e" class="outline-2">
+<h2 id="org9771d8e"><span class="section-number-2">3</span> Native code</h2>
+<div class="outline-text-2" id="text-3">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/opit/compile.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<div class="NOTES">
+<p>
+In order to run code it has to be converted to a set of instructions
+that the CPU on that machine understands.
+</p>
+
+<p>
+So the traditional process for developing software is to compile the
+source code into the instruction set that a specific computer
+architecture understands.
+</p>
+
+<p>
+And then in order to run it on another architecture, it needs to be
+recompiled first, and any architecture specific portions (such as the
+GUI etc) may need to be 'ported' or rewritten to work on the new
+platform.
+</p>
+
+<p>
+If you want to run the software on a platform to which it hasn't been
+ported, you are out of luck (other than porting it yourself of
+course).
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6fc06fa" class="outline-2">
+<h2 id="org6fc06fa"><span class="section-number-2">4</span> Java model</h2>
+<div class="outline-text-2" id="text-4">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/opit/compile-bytecode.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<div class="NOTES">
+<p>
+The JVM follows a different model. Instead of compiling the code to
+native instructions for each platform, it is compiled once to a
+generic "bytecode".
+</p>
+
+<p>
+bytecode is a very simple instruction set and it is designed to be
+executed very fast by the CPUs. It consists of simple instructions
+that move data onto and off a stack, simple arithmetic etc.
+</p>
+
+<p>
+This is still a compilation, because the bytecode designed to be much
+simpler and quicker to execute.
+</p>
+
+<p>
+Of course you still can't run this bytecode on the machine, because
+the CPU doesn't understand those instructions. So you need an
+'interpreter', which is a piece of software that will interpret and
+execute this bytecode.
+</p>
+
+<p>
+This means that the software developer can create and compile their
+software once and it will run identically (in theory) on any platform
+that has a Java bytecode interepreter available. This is the Java
+Virtual Machine, or JVM.
+</p>
+
+<p>
+So it is decoupling the software creation process from the execution
+platform. To support a new platform, you port the JVM and all of the
+existing software will start working on it without having to be
+recompiled.
+</p>
+
+<p>
+It's worth pointing out here that this isn't <b>quite</b> the whole
+picture: as we said earlier the Java bytecode is a very simple,
+low-level architecture suitable for abstracting computation. But there
+is still a higher level at which the platforms differ, so for example,
+the process of locating and opening a file will be potentially very
+different on a Windows machine compared to say a Linux one.
+</p>
+
+<p>
+So the Java Runtime Environment, as well the JVM, also includes a
+massive and extremely comprehensive standard library that Java
+software can rely on to provide an, again entirely platform
+independant abstraction over these details, allowing us to just
+option, for example a <code>FileInputStream</code> and not have to worry about
+how that is actually implemented on each platform.
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-orgc0a6e93" class="outline-3">
+<h3 id="orgc0a6e93"><span class="section-number-3">4.1</span> Standard library</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>A much higher-level of abstraction</li>
+<li>On each platform, it knows how to, e.g
+<ul class="org-ul">
+<li>open a network socket</li>
+<li>load classes</li>
+<li>find a file by name</li>
+<li>etc.</li>
+</ul></li>
+</ul>
+<ul class="org-ul">
+<li>Provides higher-level data structures and utilities
+<ul class="org-ul">
+<li>List</li>
+<li>InputStream</li>
+<li>Encryption</li>
+<li>etc.</li>
+</ul></li>
+<li>Adds new features all the time, e.g. Java8 → Java9 etc</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org05570ed" class="outline-3">
+<h3 id="org05570ed"><span class="section-number-3">4.2</span> The Java Specification</h3>
+<div class="outline-text-3" id="text-4-2">
+
+<div class="figure">
+<p><img src="./diag/spec.png" alt="spec.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9265716" class="outline-2">
+<h2 id="org9265716"><span class="section-number-2">5</span> What's in the JVM?</h2>
+<div class="outline-text-2" id="text-5">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/jvm-structure.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc5aec27" class="outline-3">
+<h3 id="orgc5aec27"><span class="section-number-3">5.1</span> Heap</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li>Memory where objects etc are allocated</li>
+<li>Global in the VM instance (i.e. shared across threads)</li>
+<li>Allocated data remains until de-allocated</li>
+<li>Garbage collected to automatically de-allocated unused items</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge7bebd9" class="outline-3">
+<h3 id="orge7bebd9"><span class="section-number-3">5.2</span> Methods</h3>
+<div class="outline-text-3" id="text-5-2">
+<ul class="org-ul">
+<li>The stage space where executable bytecode loaded from class files is
+stored.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6775cb2" class="outline-3">
+<h3 id="org6775cb2"><span class="section-number-3">5.3</span> Threads</h3>
+<div class="outline-text-3" id="text-5-3">
+<ul class="org-ul">
+<li>An individual execution state</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd071579" class="outline-3">
+<h3 id="orgd071579"><span class="section-number-3">5.4</span> Stacks</h3>
+<div class="outline-text-3" id="text-5-4">
+<ul class="org-ul">
+<li>Ephemeral storage</li>
+<li>Local variables</li>
+<li>Unique to a thread</li>
+</ul>
+</div>
+
+<div id="outline-container-org0a77bd5" class="outline-4">
+<h4 id="org0a77bd5"><span class="section-number-4">5.4.1</span> Call stack</h4>
+<div class="outline-text-4" id="text-5-4-1">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/stack1.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf7294ab" class="outline-4">
+<h4 id="orgf7294ab"><span class="section-number-4">5.4.2</span> Call stack - visit</h4>
+<div class="outline-text-4" id="text-5-4-2">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/stack2.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org70233c9" class="outline-4">
+<h4 id="org70233c9"><span class="section-number-4">5.4.3</span> Call stack - return</h4>
+<div class="outline-text-4" id="text-5-4-3">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/stack3.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgccf4d1a" class="outline-4">
+<h4 id="orgccf4d1a"><span class="section-number-4">5.4.4</span> Stacktrace</h4>
+<div class="outline-text-4" id="text-5-4-4">
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #5317ac;">public</span> <span style="color: #5317ac;">class</span> <span style="color: #8f0075;">Excep</span> {
+  <span style="color: #5317ac;">public</span> <span style="color: #5317ac;">static</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">fn2</span>() <span style="color: #5317ac;">throws</span> <span style="color: #8f0075;">IllegalArgumentException</span> {
+    <span style="color: #5317ac;">throw</span> <span style="color: #5317ac;">new</span> <span style="color: #8f0075;">IllegalArgumentException</span>();
+  }
+
+  <span style="color: #5317ac;">public</span> <span style="color: #5317ac;">static</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">fn1</span>() <span style="color: #5317ac;">throws</span> <span style="color: #8f0075;">IllegalArgumentException</span> {
+    fn2();
+  }
+
+  <span style="color: #5317ac;">public</span> <span style="color: #5317ac;">static</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">main</span>(<span style="color: #8f0075;">String</span>[] <span style="color: #00538b;">args</span>) <span style="color: #5317ac;">throws</span> <span style="color: #8f0075;">IllegalArgumentException</span> {
+    fn1();
+  }
+}
+</pre>
+</div>
+
+<pre class="example">
+Exception in thread "main" java.lang.IllegalArgumentException
+	at Excep.fn2(Excep.java:3)
+	at Excep.fn1(Excep.java:7)
+	at Excep.main(Excep.java:11)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc710075" class="outline-2">
+<h2 id="orgc710075"><span class="section-number-2">6</span> What does bytecode look like?</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>1-byte opcode specifying operation to be performed</li>
+<li>Followed by zero or more operands
+<ul class="org-ul">
+<li>the specific bytecode defines how many of what type of operands it
+takes</li>
+</ul></li>
+</ul>
+
+<ul class="org-ul">
+<li>Very little typing
+<ul class="org-ul">
+<li>the compiler still has to do that work before generating the
+bytecode.</li>
+</ul></li>
+
+<li>primitive types, int, long etc.</li>
+<li><code>reference</code> type</li>
+</ul>
+</div>
+
+<div id="outline-container-orge5a6aae" class="outline-3">
+<h3 id="orge5a6aae"><span class="section-number-3">6.1</span> yeah but I want to <b>see</b> it</h3>
+<div class="outline-text-3" id="text-6-1">
+<ul class="org-ul">
+<li>We can use <code>javap</code> to disassemble class files and take a look.
+<ul class="org-ul">
+<li><code>-c</code> to include 'disassembly' to byte code</li>
+<li><code>-verbose</code> to include the constant pool</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga8e555b" class="outline-3">
+<h3 id="orga8e555b"><span class="section-number-3">6.2</span> A simple example - Java source</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+Java code:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #5317ac;">public</span> <span style="color: #8f0075;">void</span> <span style="color: #721045;">count</span>(<span style="color: #8f0075;">int</span> <span style="color: #00538b;">max</span>) {
+    <span style="color: #8f0075;">int</span> <span style="color: #00538b;">i</span> = 0;
+    <span style="color: #5317ac;">while</span>(i &lt; <span style="color: #8f0075;">max</span>) i++;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9a07f09" class="outline-3">
+<h3 id="org9a07f09"><span class="section-number-3">6.3</span> A simple example - bytecode</h3>
+<div class="outline-text-3" id="text-6-3">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/bytecode-count1.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0f17730" class="outline-3">
+<h3 id="org0f17730"><span class="section-number-3">6.4</span> A simple example - bytecode 2</h3>
+<div class="outline-text-3" id="text-6-4">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/bytecode-count2.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5506952" class="outline-3">
+<h3 id="org5506952"><span class="section-number-3">6.5</span> A simple example - bytecode 3</h3>
+<div class="outline-text-3" id="text-6-5">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/bytecode-count3.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org249330d" class="outline-3">
+<h3 id="org249330d"><span class="section-number-3">6.6</span> A simple example - bytecode 4</h3>
+<div class="outline-text-3" id="text-6-6">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/bytecode-count4.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd2afc62" class="outline-3">
+<h3 id="orgd2afc62"><span class="section-number-3">6.7</span> A simple example - bytecode 5</h3>
+<div class="outline-text-3" id="text-6-7">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/bytecode-count5.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org02c45ce" class="outline-3">
+<h3 id="org02c45ce"><span class="section-number-3">6.8</span> A simple example - bytecode 6</h3>
+<div class="outline-text-3" id="text-6-8">
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./diag/bytecode-count6.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org38a8185" class="outline-2">
+<h2 id="org38a8185"><span class="section-number-2">7</span> The Class file</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>Bytecode is stored in a <b>Class file</b> (e.g. on disk etc)</li>
+
+<li>Each class file contains the definition of a single class,
+interface, or module</li>
+
+<li>Used at compile time as well as run-time</li>
+</ul>
+</div>
+
+<div id="outline-container-orgd0ca13e" class="outline-3">
+<h3 id="orgd0ca13e"><span class="section-number-3">7.1</span> Class file format</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>A stream of platform-agnostic bytes
+
+<ul class="org-ul">
+<li>e.g. always big-endian etc.</li>
+</ul></li>
+
+<li>Usually stored on disk but really it is anything created by a class loader
+
+<ul class="org-ul">
+<li>could come from network</li>
+
+<li>or even be generated dynamically</li>
+</ul></li>
+</ul>
+
+<div class="NOTES">
+<p>
+Slightly glossing over some of the details, the way the JVM loads an
+application is by identifying the classes that it needs to run,
+searching the Classpath for some on-disk (or on-network)
+representation of these classes, and then it loads them in memory and
+instantiates them as neccessary. Classes as the JVM sees them have
+many of the properties that exist at the higher-level of the languages
+used to create those classes, such as methods with associated
+visibility, and properties etc.
+</p>
+
+<p>
+The fact that the JVM understands Classes and methods and so on is an
+indicator that it does exist at a higher-level than native
+machine-code, so the JVM does need to do a fair bit more work than
+just loading code into memory and executing it.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org40f2d7c" class="outline-3">
+<h3 id="org40f2d7c"><span class="section-number-3">7.2</span> Header</h3>
+<div class="outline-text-3" id="text-7-2">
+<ul class="org-ul">
+<li>Magic Constant that identifies the beginning of the stream as a Class File</li>
+<li>Version number</li>
+</ul>
+
+<pre class="example">
+$ hexdump -C Count.class
+00000000  ca fe ba be 00 00 00 38  ...
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8942b95" class="outline-3">
+<h3 id="org8942b95"><span class="section-number-3">7.3</span> Constant pool</h3>
+<div class="outline-text-3" id="text-7-3">
+<ul class="org-ul">
+<li>Avoids having to repeat constants over and over again</li>
+
+<li>Constants are just appear as an index into this table</li>
+</ul>
+
+<pre class="example">
+0: ldc           #2                  // String Hello World
+2: astore_1
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgd241d84" class="outline-3">
+<h3 id="orgd241d84"><span class="section-number-3">7.4</span> Method definitions</h3>
+<div class="outline-text-3" id="text-7-4">
+<p>
+The core instructions which define the computations.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org050ef50" class="outline-2">
+<h2 id="org050ef50"><span class="section-number-2">8</span> Optimisations</h2>
+<div class="outline-text-2" id="text-8">
+<ul class="org-ul">
+<li>The spec just defines the external view of the behaviour</li>
+<li>Lots of scope to improve the way the JVM performs without changing
+it's behaviour at the abstract level</li>
+</ul>
+</div>
+
+<div id="outline-container-orgbc730cf" class="outline-3">
+<h3 id="orgbc730cf"><span class="section-number-3">8.1</span> Just-In-Time compilation</h3>
+<div class="outline-text-3" id="text-8-1">
+<ul class="org-ul">
+<li>Code actually gets faster the more it runs</li>
+</ul>
+
+
+<div class="figure">
+<p><img src="./diag/perfplot.png" alt="perfplot.png" />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org551d6e5" class="outline-4">
+<h4 id="org551d6e5"><span class="section-number-4">8.1.1</span> Compile to native code</h4>
+<div class="outline-text-4" id="text-8-1-1">
+<ul class="org-ul">
+<li>The JVM is capable of compiling to native code on the fly</li>
+<li>But compiling takes time</li>
+<li>If a piece of code only runs once, for less time than it takes to
+compile it, you don't save time</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1d2111f" class="outline-4">
+<h4 id="org1d2111f"><span class="section-number-4">8.1.2</span> Compile only when needed</h4>
+<div class="outline-text-4" id="text-8-1-2">
+<ul class="org-ul">
+<li>The JVM detects 'hot' code
+<ul class="org-ul">
+<li>code which is executed many times</li>
+</ul></li>
+<li>and compiles it after a certain threshold</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2c52131" class="outline-2">
+<h2 id="org2c52131"><span class="section-number-2">9</span> Garbage Collector</h2>
+<div class="outline-text-2" id="text-9">
+<ul class="org-ul">
+<li>Tracks references to objects</li>
+<li>Frees the memory when they are no longer referenced / reachable</li>
+<li>Removes the burden on the programmer to manage memory</li>
+</ul>
+</div>
+
+<div id="outline-container-org9578777" class="outline-3">
+<h3 id="org9578777"><span class="section-number-3">9.1</span> Marking phase</h3>
+<div class="outline-text-3" id="text-9-1">
+<ul class="org-ul">
+<li>searches all objects to see which are accessible</li>
+<li>marks objects as used or unused</li>
+<li>can take a very long time if all objects need to be searched</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge08bf76" class="outline-3">
+<h3 id="orge08bf76"><span class="section-number-3">9.2</span> Deletion phase</h3>
+<div class="outline-text-3" id="text-9-2">
+<ul class="org-ul">
+<li>frees up space by deleting objects marked as unused</li>
+<li>results in fragmented free space
+<ul class="org-ul">
+<li>which can affect performance</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3c7718a" class="outline-3">
+<h3 id="org3c7718a"><span class="section-number-3">9.3</span> Compaction phase</h3>
+<div class="outline-text-3" id="text-9-3">
+<ul class="org-ul">
+<li>moves objects around to make contiguous free space</li>
+<li>requires freezing the VM so it can move objects around</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5084b31" class="outline-3">
+<h3 id="org5084b31"><span class="section-number-3">9.4</span> Optimisations</h3>
+<div class="outline-text-3" id="text-9-4">
+<ul class="org-ul">
+<li>Generational collector
+<ul class="org-ul">
+<li>most objects are short lived</li>
+<li>limit 'minor' collections to just young objects</li>
+<li>quicker because it searches fewer objects</li>
+</ul></li>
+<li>Concurrent sweep
+<ul class="org-ul">
+<li>don't stop the world</li>
+<li>cannot compact memory</li>
+</ul></li>
+<li>etc&#x2026;!</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge82131e" class="outline-2">
+<h2 id="orge82131e"><span class="section-number-2">10</span> Graal</h2>
+<div class="outline-text-2" id="text-10">
+
+<div class="figure">
+<p><img src="./diag/graal.png" alt="graal.png" />
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7e6711e" class="outline-3">
+<h3 id="org7e6711e"><span class="section-number-3">10.1</span> A new(ish) JVM</h3>
+<div class="outline-text-3" id="text-10-1">
+<ul class="org-ul">
+<li>Written in Java</li>
+<li>Provides compilers and runtimes for many non-Java languages
+<ul class="org-ul">
+<li>Javascript, Ruby etc</li>
+</ul></li>
+<li>Ahead-of-time compiler:
+<ul class="org-ul">
+<li>compiles bytecode to native</li>
+</ul></li>
+<li>Still follows the same concepts as those outlined here
+<ul class="org-ul">
+<li>just a better implementation of them</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9469d4d" class="outline-2">
+<h2 id="org9469d4d"><span class="section-number-2">11</span> References &amp; more info</h2>
+<div class="outline-text-2" id="text-11">
+<ul class="org-ul">
+<li><a href="http://craftinginterpreters.com/a-virtual-machine.html">Crafting Virtual Interpreters</a> - "A handbook for making programming
+languages."</li>
+<li><a href="https://docs.oracle.com/javase/7/docs/technotes/guides/vm/multiple-language-support.html#invokedynamic">Invoke Dynamic</a> - from article "Java Virtual Machine Support for Non-Java Languages"</li>
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se14/html/index.html">Java VM Specification</a>
+<ul class="org-ul">
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se14/html/jvms-4.html">Class file format</a></li>
+</ul></li>
+<li><a href="https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html">Java Garbage Collection Basics</a></li>
+<li><a href="https://medium.com/graalvm/graalvm-ten-things-12d9111f307d">Top Ten Things to do with GraalVM</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Paul Roberts</p>
+<p class="date">Created: 2020-06-26 Fri 09:45</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
